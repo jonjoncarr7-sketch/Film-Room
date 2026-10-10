@@ -1,5 +1,7 @@
 # Film Room
 
+Live site: https://filmroomprops.netlify.app
+
 NFL research tool: player prop hit rates with matchup and coverage context, weekly game breakdowns, Best Spots, a bet slip calculator and a pick tracker.
 
 - `index.html` is the whole site. It is rebuilt every Tuesday from the scripts in `kit/`.
