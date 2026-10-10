@@ -7,7 +7,7 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",
 const ord=n=>{const s=["th","st","nd","rd"],v=n%100;return n+(s[(v-20)%10]||s[v]||s[0])};
 const poss=n=>/s$/i.test(n)?n+"'":n+"'s";
 const sgn=v=>v>0?"+"+v:String(v);
-const fmtTime=t=>{let [h,m]=t.split(":").map(Number);const ap=h>=12?"PM":"AM";h=h%12||12;return `${h}:${String(m).padStart(2,"0")} ${ap} ET`};
+const fmtTime=t=>{let [h,m]=t.split(":").map(Number);h=(h+21)%24;const ap=h>=12?"PM":"AM";h=h%12||12;return `${h}:${String(m).padStart(2,"0")}\u00a0${ap}\u00a0PT`};
 const fmtDate=d=>{const [y,m,dd]=d.split("-").map(Number);return ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][m-1]+" "+dd};
 
 const STAT={pass:{label:"Pass yds",long:"passing yards",d:"pass",f:"pass_",vol:"att",rk:"pr",yd:"pa"},rush:{label:"Rush yds",long:"rushing yards",d:"rush",f:"rush",vol:"car",rk:"rr",yd:"ra"},
