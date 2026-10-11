@@ -1,4 +1,6 @@
 [build]
+  # Only the main branch is the website; the data branch is read straight from GitHub.
+  ignore = "test \"$BRANCH\" != \"main\""
   publish = "."
   command = ""
 

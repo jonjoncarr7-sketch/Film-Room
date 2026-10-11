@@ -1223,8 +1223,11 @@ function applyLiveSafe(){if(typing()){clearTimeout(liveT);liveT=setTimeout(apply
 let liveT;const liveSoon=()=>{clearTimeout(liveT);liveT=setTimeout(applyLiveSafe,150)};
 // Live data: inside Claude it streams from the artifact database; on a regular website it polls live.json next to the page.
 let lastLiveStamp="";
-async function pollLiveFile(){try{const r=await fetch("live.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();
-  const stamp=(j.meta&&j.meta.updated)||"";if(stamp&&stamp===lastLiveStamp)return;lastLiveStamp=stamp;
+const LIVE_SRC=["https://raw.githubusercontent.com/jonjoncarr7-sketch/Film-Room/data/live.json","live.json"];
+async function getLive(u){try{const r=await fetch(u+"?t="+Date.now(),{cache:"no-store"});if(!r.ok)return null;return await r.json()}catch(e){return null}}
+async function pollLiveFile(){try{const all=(await Promise.all(LIVE_SRC.map(getLive))).filter(j=>j&&j.meta);if(!all.length)return;
+  const j=all.sort((x,y)=>String(y.meta.updated||"").localeCompare(String(x.meta.updated||"")))[0];
+  const stamp=j.meta.updated||"";if(stamp&&stamp===lastLiveStamp)return;lastLiveStamp=stamp;
   Object.keys(LIVE).forEach(k=>{if(j[k]!==undefined)LIVE[k]=j[k]});liveSoon()}catch(e){}}
 function startPolling(){pollLiveFile();setInterval(()=>{if(!document.hidden)pollLiveFile()},60000);document.addEventListener("visibilitychange",()=>{if(!document.hidden)pollLiveFile()})}
 (async()=>{try{if(!window.claude||!window.claude.use){startPolling();return}const db=await window.claude.use("db");if(!db){startPolling();return}
